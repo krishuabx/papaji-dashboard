@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAPAJI X DASHBOARD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap');
+        body { 
+            font-family: 'Space Grotesk', sans-serif; 
+            background-color: #000; 
+            color: #fff;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar { width: 0; }
+        .animate-in { animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slide-up { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .bg-glass {
+            background: rgba(12, 18, 24, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const App = () => {
+            const [isLoggedIn, setIsLoggedIn] = useState(false);
+            const [loginForm, setLoginForm] = useState({ user: '', pass: '' });
+            const [loginError, setLoginError] = useState('');
+            const [activeView, setActiveView] = useState('hub'); 
+            const [copied, setCopied] = useState(false);
+            const canvasRef = useRef(null);
+
+            const UPI_ID = "7451080597@fam";
+            const CONTACT_NUMBER = "917579143329";
+            const WHATSAPP_URL = `https://wa.me/${CONTACT_NUMBER}`;
+            const AUTH_USER = "Krishu X papaji";
+            const AUTH_PASS = "Krishu X papaji";
+
+            // Initialize Lucide icons after render
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            });
+
+            const openWhatsApp = (message = "Hello Papaji, I want to inquire about credits.") => {
+                const encodedMessage = encodeURIComponent(message);
+                window.location.href = `${WHATSAPP_URL}?text=${encodedMessage}`;
+            };
+
+            const copyToClipboard = (text) => {
+                const el = document.createElement('textarea');
+                el.value = text;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            const depositOffers = [
+                { name: "DRIP CLIENT", icon: "flame", color: "text-orange-500", options: [{ credits: "10 CREDIT", price: "350" }, { credits: "3 CREDIT", price: "100" }] },
+                { name: "HG CHEAT", icon: "zap", color: "text-yellow-400", options: [{ credits: "10 CREDIT", price: "450" }, { credits: "2 CREDIT", price: "250" }] },
+                { name: "PATO TEAM", icon: "shield", color: "text-blue-500", options: [{ credits: "10 CREDIT", price: "700" }, { credits: "3 CREDIT", price: "300" }] },
+                { name: "PRIME HOOK", icon: "cpu", color: "text-purple-500", options: [{ credits: "20 CREDIT", price: "500" }, { credits: "5 CREDIT", price: "190" }] }
+            ];
+
+            const marketplaceItems = [
+                { name: "KRISHUXIT", features: ["Premium Injection", "Safe Mode", "Anti-Ban"], icon: "star", color: "text-yellow-400" },
+                { name: "AKHAND XIT", features: ["Ultra Bypass", "Smooth Aim", "Full Control"], icon: "shield-check", color: "text-green-400" },
+                { name: "BR MOD FF", features: ["Silent Aimbot", "Aimbot Magnet", "High Speed"], icon: "zap", color: "text-cyan-400" },
+                { name: "DRIPCLIENT FF", features: ["Aimbot", "Silent Aimbot", "Underground"], icon: "flame", color: "text-orange-500" }
+            ];
+
+            // Background Animation Logic
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                let particles = [];
+                const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+                class Particle {
+                    constructor() { this.reset(); }
+                    reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.vx = (Math.random() - 0.5) * 0.4; this.vy = (Math.random() - 0.5) * 0.4; }
+                    update() { this.x += this.vx; this.y += this.vy; if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset(); }
+                    draw() { ctx.fillStyle = '#00e5ff'; ctx.beginPath(); ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2); ctx.fill(); }
+                }
+                const init = () => { resize(); particles = Array.from({ length: 30 }, () => new Particle()); };
+                const loop = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    particles.forEach(p => { p.update(); p.draw(); });
+                    requestAnimationFrame(loop);
+                };
+                init(); loop();
+                window.addEventListener('resize', resize);
+                return () => window.removeEventListener('resize', resize);
+            }, []);
+
+            if (!isLoggedIn) {
+                return (
+                    <div className="min-h-screen flex flex-col items-center justify-center p-6 relative">
+                        <canvas ref={canvasRef} className="absolute inset-0 z-0 opacity-40 pointer-events-none" />
+                        <div className="relative z-10 w-full max-w-[340px] bg-[#0c1218] border border-cyan-500/20 rounded-2xl p-8 backdrop-blur-md">
+                            <div className="text-center mb-8">
+                                <div className="w-16 h-16 bg-cyan-950/50 border border-cyan-500/30 rounded-full mx-auto flex items-center justify-center mb-4">
+                                    <i data-lucide="shield-check" className="text-cyan-400 w-8 h-8"></i>
+                                </div>
+                                <h1 className="text-xl font-black tracking-widest uppercase italic">PAPAJI X <span className="text-cyan-400">ADMIN</span></h1>
+                            </div>
+                            <form onSubmit={(e) => { e.preventDefault(); if (loginForm.user === AUTH_USER && loginForm.pass === AUTH_PASS) setIsLoggedIn(true); else setLoginError('Access Denied'); }} className="space-y-4">
+                                <input type="text" placeholder="USER NAME" required className="w-full bg-[#131b24] border border-white/5 rounded-lg py-3 px-4 text-[11px] font-bold outline-none focus:border-cyan-500/50" value={loginForm.user} onChange={e => setLoginForm({...loginForm, user: e.target.value})} />
+                                <input type="password" placeholder="PASSWORD" required className="w-full bg-[#131b24] border border-white/5 rounded-lg py-3 px-4 text-[11px] font-bold outline-none focus:border-cyan-500/50" value={loginForm.pass} onChange={e => setLoginForm({...loginForm, pass: e.target.value})} />
+                                <button className="w-full bg-cyan-400 text-black py-3 rounded-lg font-black text-[10px] uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all">LOGIN</button>
+                            </form>
+                            {loginError && <p className="text-red-500 text-[9px] text-center mt-4 font-bold uppercase">{loginError}</p>}
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen flex flex-col font-sans relative">
+                    <canvas ref={canvasRef} className="fixed inset-0 z-0 opacity-20 pointer-events-none" />
+                    
+                    <header className="relative z-10 px-6 py-4 border-b border-white/5 bg-black/80 backdrop-blur-md flex justify-between items-center sticky top-0">
+                        <div className="flex items-center gap-3">
+                            {activeView !== 'hub' && <button onClick={() => setActiveView('hub')}><i data-lucide="arrow-left" className="text-zinc-500 w-5 h-5"></i></button>}
+                            <h1 className="text-xs font-black tracking-tighter uppercase italic">PAPAJI X <span className="text-cyan-400">DASHBOARD</span></h1>
+                        </div>
+                        <div onClick={() => openWhatsApp()} className="w-8 h-8 rounded-full border border-green-500/30 flex items-center justify-center cursor-pointer active:scale-90 transition-all">
+                            <i data-lucide="message-circle" className="text-green-500 w-4 h-4"></i>
+                        </div>
+                    </header>
+
+                    <main className="flex-1 relative z-10 p-6 max-w-lg mx-auto w-full overflow-y-auto pb-28">
+                        {activeView === 'hub' && (
+                            <div className="space-y-6 animate-in">
+                                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/10 border border-cyan-500/20 rounded-2xl p-6 text-center">
+                                    <p className="text-[9px] font-black text-cyan-500/60 uppercase mb-1">Active Balance</p>
+                                    <h2 className="text-3xl font-black text-cyan-400 tracking-tighter italic">₹0.00</h2>
+                                </div>
+                                <div className="grid grid-cols-1 gap-3">
+                                    <div onClick={() => setActiveView('add-money')} className="bg-[#0c1218] border border-white/5 rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:border-cyan-500/30 transition-all active:scale-[0.98]">
+                                        <div className="flex items-center gap-4"><i data-lucide="coins" className="text-green-500 w-6 h-6"></i><div><h3 className="text-xs font-black uppercase">BUY CREDITS</h3><p className="text-[8px] text-zinc-500 font-bold uppercase">WhatsApp Direct Deal</p></div></div>
+                                        <i data-lucide="chevron-right" className="text-zinc-700 w-4 h-4"></i>
+                                    </div>
+                                    <div onClick={() => setActiveView('keys')} className="bg-[#0c1218] border border-white/5 rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:border-cyan-500/30 transition-all active:scale-[0.98]">
+                                        <div className="flex items-center gap-4"><i data-lucide="key" className="text-purple-500 w-6 h-6"></i><div><h3 className="text-xs font-black uppercase">MARKETPLACE</h3><p className="text-[8px] text-zinc-500 font-bold uppercase">KRISHUXIT & AKHAND XIT</p></div></div>
+                                        <i data-lucide="chevron-right" className="text-zinc-700 w-4 h-4"></i>
+                                    </div>
+                                    <div onClick={() => setActiveView('payment-qr')} className="bg-[#0c1218] border border-white/5 rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:border-cyan-500/30 transition-all active:scale-[0.98]">
+                                        <div className="flex items-center gap-4"><i data-lucide="qr-code" className="text-yellow-500 w-6 h-6"></i><div><h3 className="text-xs font-black uppercase">SCAN & PAY</h3><p className="text-[8px] text-zinc-500 font-bold uppercase">Quick UPI Verification</p></div></div>
+                                        <i data-lucide="chevron-right" className="text-zinc-700 w-4 h-4"></i>
+                                    </div>
+                                </div>
+                                <div onClick={() => openWhatsApp()} className="bg-green-500/5 border border-green-500/20 rounded-2xl p-4 flex items-center justify-between cursor-pointer">
+                                    <div className="flex items-center gap-3">
+                                        <i data-lucide="message-circle" className="text-green-500 w-5 h-5"></i>
+                                        <div>
+                                            <p className="text-[9px] font-black text-white">WHATSAPP SUPPORT</p>
+                                            <p className="text-[8px] text-zinc-500 uppercase">+91 7579143329</p>
+                                        </div>
+                                    </div>
+                                    <i data-lucide="external-link" className="text-zinc-700 w-3 h-3"></i>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeView === 'add-money' && (
+                            <div className="space-y-6 animate-in">
+                                {depositOffers.map((offer, idx) => (
+                                    <div key={idx} className="bg-[#0c1218] border border-white/5 rounded-2xl p-4 space-y-3">
+                                        <div className="flex items-center gap-2 border-b border-white/5 pb-2">
+                                            <i data-lucide={offer.icon} className={`${offer.color} w-4 h-4`}></i>
+                                            <h3 className="text-[11px] font-black uppercase text-zinc-300">{offer.name}</h3>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            {offer.options.map((opt, oIdx) => (
+                                                <div key={oIdx} onClick={() => openWhatsApp(`Buy: ${offer.name} (${opt.credits}) for ₹${opt.price}`)} className="bg-black/60 border border-white/10 p-4 rounded-xl text-center group cursor-pointer active:scale-95 transition-all">
+                                                    <p className="text-[10px] font-black text-cyan-400">{opt.credits}</p>
+                                                    <p className="text-lg font-black text-white italic">₹{opt.price}</p>
+                                                    <div className="mt-2 bg-green-500/10 py-1 rounded-lg text-[8px] font-black text-green-500 uppercase flex items-center justify-center gap-1">
+                                                        <i data-lucide="shopping-cart" className="w-2 h-2"></i> BUY
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {activeView === 'keys' && (
+                            <div className="space-y-6 animate-in">
+                                {marketplaceItems.map((item, i) => (
+                                    <div key={i} className="bg-[#0c1218] border border-white/5 rounded-3xl p-5 space-y-4">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 rounded-xl bg-cyan-400/10 flex items-center justify-center border border-cyan-400/20">
+                                                <i data-lucide={item.icon} className={`${item.color} w-5 h-5`}></i>
+                                            </div>
+                                            <h3 className="text-sm font-black uppercase italic tracking-tighter">{item.name}</h3>
+                                        </div>
+                                        <div className="space-y-2">
+                                            {item.features.map((f, fi) => (
+                                                <div key={fi} className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-2 bg-black/40 p-2 rounded-lg">
+                                                    <i data-lucide="check-circle" className="text-cyan-400 w-3 h-3"></i> {f}
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <button onClick={() => openWhatsApp(`I want to buy ${item.name}`)} className="w-full bg-cyan-400 text-black py-3 rounded-xl font-black text-[10px] uppercase shadow-lg active:scale-95 transition-all">
+                                            BUY {item.name} NOW
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {activeView === 'payment-qr' && (
+                            <div className="text-center space-y-6 animate-in">
+                                <div className="mx-auto w-full max-w-[280px] bg-white rounded-3xl p-4 shadow-2xl">
+                                    <img 
+                                        src="https://raw.githubusercontent.com/krishuxpapaji/assets/main/qr.jpg" 
+                                        onError={(e) => { e.target.src = "https://i.ibb.co/Xxd9n9B/Screenshot-2026-02-23-16-42-27-91-ba41e9a642e6e0e2b03656bfbbffd6e4.jpg"; }} 
+                                        className="w-full rounded-xl" 
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <div onClick={() => copyToClipboard(UPI_ID)} className="bg-zinc-900 border border-white/5 p-4 rounded-xl flex items-center justify-between cursor-pointer active:scale-95 transition-all">
+                                        <span className="text-[11px] font-mono text-zinc-400">{UPI_ID}</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-[8px] font-black text-zinc-600 uppercase">{copied ? 'COPIED' : 'COPY'}</span>
+                                            <i data-lucide="copy" className="text-zinc-600 w-4 h-4"></i>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => openWhatsApp("Payment completed. Verification needed.")} className="w-full bg-[#25D366] text-black py-4 rounded-xl font-black text-[11px] uppercase flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all">
+                                        <i data-lucide="message-circle" className="w-5 h-5"></i> SEND SCREENSHOT
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </main>
+
+                    <nav className="fixed bottom-6 left-6 right-6 bg-black/95 border border-white/10 backdrop-blur-xl rounded-2xl p-2 flex justify-around items-center z-50 shadow-2xl">
+                        <button onClick={() => setActiveView('hub')} className={`p-3 rounded-xl transition-all ${activeView === 'hub' ? 'bg-cyan-400 text-black shadow-cyan-500/50' : 'text-zinc-500'}`}>
+                            <i data-lucide="layout-dashboard" className="w-5 h-5"></i>
+                        </button>
+                        <button onClick={() => setActiveView('add-money')} className={`p-3 rounded-xl transition-a
